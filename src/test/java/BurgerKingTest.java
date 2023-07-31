@@ -3,10 +3,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 public class BurgerKingTest {
@@ -14,6 +10,7 @@ public class BurgerKingTest {
     WebElement signInButtonOnMainPage;
     WebElement emailInput;
     WebElement signInButtonOnEmailPage;
+    WebElement acceptCookieButton;
 
     @BeforeEach
     public void beforeTest() {
@@ -21,7 +18,8 @@ public class BurgerKingTest {
         driver.get("https://www.bk.com/");
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         driver.manage().window().maximize();
-
+        acceptCookieButton = driver.findElement(By.xpath("//button[@id='onetrust-accept-btn-handler']"));
+        acceptCookieButton.click();
         signInButtonOnMainPage = driver.findElement(By.xpath("//div[@data-testid='mobile-nav-signup-link']"));
         signInButtonOnMainPage.click();
         emailInput = driver.findElement(By.xpath("//input[@autocomplete='email']"));
@@ -61,7 +59,7 @@ public class BurgerKingTest {
         agreeCheckBox.click();
         WebElement createAccountButton = driver.findElement(By.xpath("//*[@id=\"scroll-container\"]/div/div/div/div/div/div/div[3]/div/div/div[6]/div/div"));
         createAccountButton.click();
-        WebElement errorMessage = driver.findElement(By.xpath("дописать"));
+        WebElement errorMessage = driver.findElement(By.xpath("/html/body/div[5]/div/div[2]/div/div/div[2]/div/div/div[2]"));
         String actualErrorMessage = errorMessage.getText();
         String expectedErrorMessage = "We sent an email with login instructions to test@test.com";
         Assertions.assertEquals(expectedErrorMessage, actualErrorMessage);
